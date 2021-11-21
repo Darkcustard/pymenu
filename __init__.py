@@ -95,6 +95,8 @@ class button():
             else:
 
                 self.text = "button"
+
+            self.lastClicked = 0
 		
 		#setting rectangle
 		
@@ -131,12 +133,28 @@ class button():
                     
                     )
 
-    def checkHover(self):
+    def checkClick(self):
+
+        left, middle, right = pygame.mouse.get_pressed()
+
+        output = False
+
+        if left == 0 and self.lastClicked == 1:
+            
+            output = 'up'
+
+        if left == 1 and self.lastClicked == 0:
+            
+            output = 'down'
+
+        self.lastClicked = left
+
+        return output
+
+    def poll(self):
 
         x,y = pygame.mouse.get_pos()
-        
-        left, middle, right = pygame.mouse.get_pressed()
-        
+
         #X range
         if self.parent == None:
 
@@ -147,11 +165,11 @@ class button():
 
                     self.color = self.color_hover 
 
-                    
+                    clkstate = self.checkClick()
 
-                    if left:
-
+                    if clkstate == 'up':
                         self.function()
+
 
                 else:
 
@@ -171,11 +189,11 @@ class button():
 
                     self.color = self.color_hover 
 
-                    left, middle, right = pygame.mouse.get_pressed()
+                    clkstate = self.checkClick()
 
-                    if left:
-
+                    if clkstate == 'up':
                         self.function()
+
 
                 else:
 
@@ -185,12 +203,9 @@ class button():
             
                 self.color = self.default_color
 
-
-
-
     def draw(self):
 
-        self.checkHover()
+        self.poll()
 		
         if self.outline:
             pygame.draw.rect(self.window, self.outline_color, self.outline_rect)
@@ -315,8 +330,3 @@ class panel():
         #drawing children
         for child_obj in self.children:
             child_obj.draw()
-
-
-
-
-
