@@ -1,5 +1,7 @@
 import pygame
 
+pygame.font.init()
+
 class button():
 
     def __init__(self,window,args):
@@ -331,9 +333,25 @@ class panel():
 
 class text():
 
-    def __init__(self,args):
+    def __init__(self,window,args):
+        
+        self.window = window
+        self.children = []
 
         #region arg parsing
+
+        if "text" in args:
+            self.text = args["text"]
+
+        else:
+            self.text = 'text'
+
+        if "parent" in args:
+            self.parent = args["parent"]
+            args["parent"].children.append(self)
+        
+        else:
+            self.parent = None
 
         if "pos" in args:
             self.pos = args["pos"]
@@ -363,12 +381,43 @@ class text():
             self.color = args['color']
             
         else:
-            self.x = (0,0,0)
+            self.color = (0,0,0)
 
         if 'font' in args:
             self.font = args['font']
             
         else:
             self.font = None
+
+        if 'underline' in args:
+            self.underline = args['underline']
+            
+        else:
+            self.underline = False
+
+
+        #region creating text object
+
+        #customize font
+        self.font_object = pygame.font.SysFont(self.font, self.size)
+        self.font_object.set_underline(self.underline)
+        self.font_object.set_bold(self.bold)
+        self.font_object.set_italic(self.italic)
+
+        #create drawable object
+        self.text_surface = self.font_object.render(self.text, True, self.color)
+
+        #endregion
+    
+    def draw(self):
+        
+        if self.parent == None:
+            self.window.blit(self.text_surface,self.pos)
+
+        else:
+            self.window.blit(self.text_surface,(self.parent.pos[0]+self.pos[0],self.parent.pos[1]+self.pos[1]))
+
+        for child in self.children:
+            child.draw()
 
         
