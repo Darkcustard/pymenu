@@ -4,101 +4,94 @@ class button():
 
     def __init__(self,window,args):
 
-        if True:
+        #region arg parsing
+        self.window = window
 
-            self.window = window
-
-            if "outline" in args:
-                self.outline = args["outline"]
+        if "outline" in args:
+            self.outline = args["outline"]
             
-            else:
-                self.outline = False
+        else:
+            self.outline = False
             
-            if "outline_size" in args:
-                self.outline_size = args["outline_size"]
+        if "outline_size" in args:
+            self.outline_size = args["outline_size"]
 
-            else:
-                self.outline_size = 5	
+        else:
+            self.outline_size = 5	
 	    			    
-            if "outline_color" in args:
-                self.outline_color = args["outline_color"]
+        if "outline_color" in args:
+            self.outline_color = args["outline_color"]
 	    	 
-            else:
-                self.outline_color = (0,0,0)
+        else:
+            self.outline_color = (0,0,0)
 				    
             
-            if "parent" in args:
-                self.parent = args["parent"]
-                args["parent"].children.append(self)
+        if "parent" in args:
+            self.parent = args["parent"]
+            args["parent"].children.append(self)
 
-            else:
-                self.parent = None
+        else:
+            self.parent = None
 
 
-            if "function" in args:
-                self.function = args["function"]
-            else:
-                self.function = lambda : print('Button Pressed')
+        if "function" in args:
+            self.function = args["function"]
+        else:
+            self.function = lambda : print('Button Pressed')
 
                 
-            if "visible" in args:
-            	self.visible = args["visible"]
-            
-            else:
-            	self.visible = True
+        if "visible" in args:
+            self.visible = args["visible"]
+
+        else:
+            self.visible = True
             	
-            if "active" in args:
-            	self.active = args["active"]
+        if "active" in args:
+            self.active = args["active"]
             
-            else:
-                self.active = True			
+        else:
+            self.active = True			
 
 
-            if "pos" in args:
-                self.pos = args["pos"]
+        if "pos" in args:
+            self.pos = args["pos"]
 
-            else:
-                self.pos = (0,0)
+        else:
+            self.pos = (0,0)
 
             
-            if "color" in args:
-                self.default_color = args["color"]
-                self.color = args["color"]
+        if "color" in args:
+            self.default_color = args["color"]
+            self.color = args["color"]
 
-            else:
-                self.color = (60,125,255)
-                self.default_color = (60,125,255)
+        else:
+            self.color = (60,125,255)
+            self.default_color = (60,125,255)
                 
-            if "color_clicked" in args:
-                self.color_clicked = args["color_clicked"]
+        if "color_clicked" in args:
+            self.color_clicked = args["color_clicked"]
 				
-            else:
-                self.color_clicked = (100,100,100)
+        else:
+            self.color_clicked = (100,100,100)
             
-            if "color_hover" in args:
-                self.color_hover = args["color_hover"]
+        if "color_hover" in args:
+            self.color_hover = args["color_hover"]
 				
-            else:
-                self.color_hover = (130,130,130)
+        else:
+            self.color_hover = (130,130,130)
 
 
-            if "size" in args:
-                self.size = args["size"]
+        if "size" in args:
+            self.size = args["size"]
             
-            else:
-                self.size = (50,50)
+        else:
+            self.size = (50,50)
 
-
-            if "text" in args:
-                self.text = args["text"]
-
-            else:
-
-                self.text = "button"
-
-            self.lastClicked = 0
+        self.lastClicked = 0
 		
-		#setting rectangle
+        #endregion
+
+		#region setting rectangle
 		
         if self.parent == None:
 
@@ -108,7 +101,9 @@ class button():
 
             self.background_rect = pygame.Rect(self.parent.pos[0]+self.pos[0], self.parent.pos[1]+self.pos[1], self.size[0], self.size[1])
 		
-		#outlines
+        #endregion
+
+		#region outlines
 		
         if self.outline:
 			
@@ -132,6 +127,8 @@ class button():
                     self.size[1] + self.outline_size  # Size Y
                     
                     )
+        
+        #endregion
 
     def checkClick(self):
 
@@ -216,74 +213,72 @@ class panel():
     
     def __init__(self,window,args):
 
+        #region arg parsing
+
         self.children = []
-
-        
-        if True:
-
-            self.window = window
+        self.window = window
             
             
-            if "outline" in args:
-                self.outline = args["outline"]
+        if "outline" in args:
+             self.outline = args["outline"]
 
-            else:
-                self.outline = False
+        else:
+            self.outline = False
 	    	
 	    	
-            if "outline_size" in args:
-                self.outline_size = args["outline_size"]
+        if "outline_size" in args:
+            self.outline_size = args["outline_size"]
 	    		
-            else:
-                self.outline_size = 5	
+        else:
+            self.outline_size = 5	
 	    			    
-            if "outline_color" in args:
-                self.outline_color = args["outline_color"]
+        if "outline_color" in args:
+            self.outline_color = args["outline_color"]
 	    	 
-            else:
-                self.outline_color = (0,0,0)
+        else:
+            self.outline_color = (0,0,0)
 	    		
 
-            if "visible" in args:
-                self.visible = args["visible"]
+        if "visible" in args:
+            self.visible = args["visible"]
             
-            else:
-                self.visible = True
+        else:
+            self.visible = True
             	
             	
-            if "pos" in args:
-                self.pos = args["pos"]
+        if "pos" in args:
+            self.pos = args["pos"]
             
-            else:
+        else:
 
-                self.pos = (0,0)
+            self.pos = (0,0)
 
             #color
-            if "color" in args:
-                self.color = args["color"]
+        if "color" in args:
+            self.color = args["color"]
 
-            else:
+        else:
 
-                self.color = (255,125,125)
+            self.color = (255,125,125)
 
 
-            #size
-            if "size" in args:
-                self.size = args["size"]
+        #size
+        if "size" in args:
+            self.size = args["size"]
 
-            else:
+        else:
 
-                self.size = (100,100)
+            self.size = (100,100)
 
-            #parent
+        #parent
 
-            if "parent" in args:
-                self.parent = args["parent"]
-                args["parent"].children.append(self)
+        if "parent" in args:
+            self.parent = args["parent"]
+            args["parent"].children.append(self)
 
-            else:
+        else:
 
-                self.parent = None
+            self.parent = None
     
         
         if self.parent == None:
@@ -294,7 +289,9 @@ class panel():
 
             self.background_rect = pygame.Rect(self.parent.pos[0]+self.pos[0], self.parent.pos[1]+self.pos[1], self.size[0], self.size[1])
             
-        #outlines
+        #endregion
+
+        #region outlines
 		
         if self.outline:
 			
@@ -318,8 +315,9 @@ class panel():
                     self.size[1] + self.outline_size  # Size Y
                     
                     )
+        
+        #endregion
 				
-    
     def draw(self):
 		
         if self.outline:
@@ -330,3 +328,47 @@ class panel():
         #drawing children
         for child_obj in self.children:
             child_obj.draw()
+
+class text():
+
+    def __init__(self,args):
+
+        #region arg parsing
+
+        if "pos" in args:
+            self.pos = args["pos"]
+
+        else:
+            self.pos = (0,0)
+
+        if 'bold' in args:
+            self.bold = args['bold']
+            
+        else:
+            self.bold = False
+
+        if 'italic' in args:
+            self.italic = args['italic']
+            
+        else:
+            self.italic = False
+
+        if 'size' in args:
+            self.size = args['size']
+            
+        else:
+            self.size = 20
+
+        if 'color' in args:
+            self.color = args['color']
+            
+        else:
+            self.x = (0,0,0)
+
+        if 'font' in args:
+            self.font = args['font']
+            
+        else:
+            self.font = None
+
+        
