@@ -8,6 +8,7 @@ class button():
 
         #region arg parsing
         self.window = window
+        self.children = []
 
         if "outline" in args:
             self.outline = args["outline"]
@@ -161,13 +162,18 @@ class button():
 
                 #Y range
                 if (y >= self.pos[1]) and (y <= self.pos[1]+self.size[1]):
-
-                    self.color = self.color_hover 
+                    
+                    if self.lastClicked == 0:
+                        self.color = self.color_hover 
 
                     clkstate = self.checkClick()
 
                     if clkstate == 'up':
                         self.function()
+                        self.color = self.color_hover
+                    
+                    if clkstate == 'down':
+                        self.color = self.color_clicked
 
 
                 else:
@@ -185,13 +191,18 @@ class button():
 
                 #Y range
                 if (y >= self.pos[1]+self.parent.pos[1]) and (y <= self.pos[1]+self.parent.pos[1]+self.size[1]):
-
-                    self.color = self.color_hover 
+                    
+                    if self.lastClicked == 0:
+                        self.color = self.color_hover 
 
                     clkstate = self.checkClick()
 
                     if clkstate == 'up':
                         self.function()
+                        self.color = self.color_hover
+
+                    if clkstate == 'down':
+                        self.color = self.color_clicked
 
 
                 else:
@@ -209,7 +220,12 @@ class button():
         if self.outline:
             pygame.draw.rect(self.window, self.outline_color, self.outline_rect)
 
+        
+
         pygame.draw.rect(self.window, self.color, self.background_rect)
+
+        for child in self.children:
+            child.draw()
        
 class panel():
     
@@ -301,8 +317,8 @@ class panel():
 
                 self.outline_rect = pygame.Rect(
                 
-                    self.parent.pos[0]+self.pos[0]-self.outline_size, #X
-                    self.parent.pos[1]+self.pos[1]-self.outline_size, #Y
+                    self.parent.pos[0]+self.pos[0]-round(self.outline_size/2), #X
+                    self.parent.pos[1]+self.pos[1]-round(self.outline_size/2), #Y
                     self.size[0] + self.outline_size, # Size X
                     self.size[1] + self.outline_size  # Size Y
                     
@@ -311,8 +327,8 @@ class panel():
 
                     self.outline_rect = pygame.Rect(
                 
-                    self.pos[0]-self.outline_size, #X
-                    self.pos[1]-self.outline_size, #Y
+                    self.pos[0]-round(self.outline_size/2), #X
+                    self.pos[1]-round(self.outline_size/2), #Y
                     self.size[0] + self.outline_size, # Size X
                     self.size[1] + self.outline_size  # Size Y
                     
