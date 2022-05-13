@@ -436,4 +436,50 @@ class text():
         for child in self.children:
             child.draw()
 
+class image():
+
+    def __init__(self,window,args):
+
+        self.window = window
+        self.children = []
+
+        if 'pos' in args:
+            self.pos = args["pos"]
+
+        else:
+            self.pos = (0,0)
+
+        self.image = pygame.image.load(args["image"]).convert_alpha()      
+
+        if 'parent' in args:
+            self.parent = args["parent"]
+            self.parent.children.append(self)
+
+        else:
+            self.parent = None
+
+        if 'size' in args:
+            self.size = args["size"]
         
+        else:
+            self.size = None
+
+        
+        #transforming
+        if self.size != None:
+            self.image = pygame.transform.scale(self.image,self.size)
+
+        
+    def draw(self):
+        
+        if self.parent == None:
+            self.window.blit(self.image,self.pos)
+        else:
+            self.window.blit(self.image,(self.pos[0]+self.parent.pos[0],self.pos[1]+self.parent.pos[1]))
+
+
+        for child in self.children:
+            child.draw()
+
+
+
