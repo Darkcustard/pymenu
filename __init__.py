@@ -126,8 +126,8 @@ class button():
                 
                     self.pos[0]-self.outline_size, #X
                     self.pos[1]-self.outline_size, #Y
-                    self.size[0] + self.outline_size, # Size X
-                    self.size[1] + self.outline_size  # Size Y
+                    self.size[0] + self.outline_size*2, # Size X
+                    self.size[1] + self.outline_size*2  # Size Y
                     
                     )
         
@@ -317,20 +317,20 @@ class panel():
 
                 self.outline_rect = pygame.Rect(
                 
-                    self.parent.pos[0]+self.pos[0]-round(self.outline_size/2), #X
-                    self.parent.pos[1]+self.pos[1]-round(self.outline_size/2), #Y
-                    self.size[0] + self.outline_size, # Size X
-                    self.size[1] + self.outline_size  # Size Y
+                    self.parent.pos[0]+self.pos[0]-self.outline_size, #X
+                    self.parent.pos[1]+self.pos[1]-self.outline_size, #Y
+                    self.size[0] + self.outline_size*2, # Size X
+                    self.size[1] + self.outline_size*2  # Size Y
                     
                     )
             else:
 
-                    self.outline_rect = pygame.Rect(
+                self.outline_rect = pygame.Rect(
                 
-                    self.pos[0]-round(self.outline_size/2), #X
-                    self.pos[1]-round(self.outline_size/2), #Y
-                    self.size[0] + self.outline_size, # Size X
-                    self.size[1] + self.outline_size  # Size Y
+                    self.pos[0]-self.outline_size, #X
+                    self.pos[1]-self.outline_size, #Y
+                    self.size[0] + self.outline_size*2, # Size X
+                    self.size[1] + self.outline_size*2  # Size Y
                     
                     )
         
@@ -464,13 +464,58 @@ class image():
         else:
             self.size = None
 
+        if 'outline' in args:
+            self.outline = args["outline"]
         
+        else:
+            self.outline = False
+
+        if 'outline_size' in args:
+            self.outline_size = args['outline_size']
+
+        else:
+            self.outline_size = 5
+
+        if 'outline_color' in args:
+            self.outline_color = args["outline_color"]
+        
+        else:
+            self.outline_color = (0,0,0)
+
+
+        if self.outline:
+
+            if self.parent == None:
+
+                self.outline_rect = pygame.Rect(
+                
+                    self.pos[0]-self.outline_size, #X
+                    self.pos[1]-self.outline_size, #Y
+                    self.size[0] + self.outline_size*2, # Size X
+                    self.size[1] + self.outline_size*2  # Size Y
+                    
+                 )
+            
+            else:
+
+                self.outline_rect = pygame.Rect(
+                
+                    self.parent.pos[0]+self.pos[0]-self.outline_size, #X
+                    self.parent.pos[1]+self.pos[1]-self.outline_size, #Y
+                    self.size[0] + self.outline_size*2, # Size X
+                    self.size[1] + self.outline_size*2  # Size Y
+                    
+                    )
+
         #transforming
         if self.size != None:
             self.image = pygame.transform.scale(self.image,self.size)
 
         
     def draw(self):
+
+        if self.outline:
+            pygame.draw.rect(self.window, self.outline_color, self.outline_rect)
         
         if self.parent == None:
             self.window.blit(self.image,self.pos)
