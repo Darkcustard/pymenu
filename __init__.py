@@ -346,6 +346,30 @@ class panel():
         #drawing children
         for child_obj in self.children:
             child_obj.draw()
+    
+    def checkHover(self):
+
+        x, y = pygame.mouse.get_pos()
+
+        #parent
+        if self.parent != None:
+
+            adj_x = self.pos[0]+self.parent.pos[0]
+            adj_y = self.pos[1]+self.parent.pos[1]
+
+            if (x > adj_x and x < adj_x + self.size[0]) and (y > adj_y and y < adj_y + self.size[1]):
+                return True
+            else:
+                return False
+
+
+        #no parent
+        elif(x > self.pos[0] and x < self.pos[0] + self.size[0]) and (y > self.pos[1] and y < self.pos[1] + self.size[1]):
+            return True
+        else:
+            return False
+
+
 
 class text():
 
