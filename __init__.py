@@ -36,6 +36,10 @@ class button():
         else:
             self.parent = None
 
+        if "function_hold" in args:
+            self.function_hold = args["function_hold"]
+        else:
+            self.function_hold = None
 
         if "function" in args:
             self.function = args["function"]
@@ -152,7 +156,8 @@ class button():
         return output
 
     def poll(self):
-
+        
+        left, _, _ = pygame.mouse.get_pressed()
         x,y = pygame.mouse.get_pos()
 
         #X range
@@ -162,6 +167,10 @@ class button():
 
                 #Y range
                 if (y >= self.pos[1]) and (y <= self.pos[1]+self.size[1]):
+
+                    #repeating hold function
+                    if left and self.function_hold != None:
+                        self.function_hold()
                     
                     if self.lastClicked == 0:
                         self.color = self.color_hover 
@@ -192,6 +201,10 @@ class button():
                 #Y range
                 if (y >= self.pos[1]+self.parent.pos[1]) and (y <= self.pos[1]+self.parent.pos[1]+self.size[1]):
                     
+                    #repeating hold function
+                    if left and self.function_hold != None:
+                        self.function_hold()
+
                     if self.lastClicked == 0:
                         self.color = self.color_hover 
 
@@ -436,7 +449,8 @@ class text():
             self.underline = False
 
 
-        #region creating text object
+    
+    def draw(self):
 
         #customize font
         self.font_object = pygame.font.SysFont(self.font, self.size)
@@ -446,10 +460,6 @@ class text():
 
         #create drawable object
         self.text_surface = self.font_object.render(self.text, True, self.color)
-
-        #endregion
-    
-    def draw(self):
         
         if self.parent == None:
             self.window.blit(self.text_surface,self.pos)
@@ -506,6 +516,9 @@ class image():
         else:
             self.outline_color = (0,0,0)
 
+        
+    def draw(self):
+
 
         if self.outline:
 
@@ -535,8 +548,6 @@ class image():
         if self.size != None:
             self.image = pygame.transform.scale(self.image,self.size)
 
-        
-    def draw(self):
 
         if self.outline:
             pygame.draw.rect(self.window, self.outline_color, self.outline_rect)
