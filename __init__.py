@@ -246,8 +246,6 @@ class button():
                     if self.lastClicked == 0:
                         self.color = self.color_hover 
 
-                    clkstate = self.checkClick()
-
                     if clkstate == 'up':
                         self.function()
                         self.color = self.color_hover
@@ -598,6 +596,3 @@ class image():
 
         for child in self.children:
             child.draw()
-
-
-
