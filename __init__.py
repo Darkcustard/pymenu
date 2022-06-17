@@ -36,6 +36,13 @@ class button():
         else:
             self.parent = None
 
+        if "function_dragoff" in args:
+            self.function_dragoff = args["function_dragoff"]
+        else:
+            self.function_dragoff = None
+
+        self.hovering = False
+
         if "function_hold" in args:
             self.function_hold = args["function_hold"]
         else:
@@ -137,6 +144,32 @@ class button():
         
         #endregion
 
+    def checkDragOff(self,mouse_pos):
+
+        x, y = mouse_pos
+        hovering = False
+        output = False
+
+        if self.parent == None:
+            if (x >= self.pos[0]) and (x <= self.pos[0]+self.size[0]):
+                if (y >= self.pos[1]) and (y <= self.pos[1]+self.size[1]):
+                    hovering = True
+
+
+        else:
+            if (x >= self.pos[0]+self.parent.pos[0]) and (x <= self.pos[0]+self.parent.pos[0]+self.size[0]):
+                if (y >= self.pos[1]+self.parent.pos[1]) and (y <= self.pos[1]+self.parent.pos[1]+self.size[1]):
+                    hovering = True
+
+        #check if mouse is moved off of button
+        if not hovering and self.hovering:
+            output = True
+        else:
+            output = False
+
+        self.hovering = hovering
+        return output
+        
     def checkClick(self):
 
         left, middle, right = pygame.mouse.get_pressed()
@@ -159,6 +192,13 @@ class button():
         
         left, _, _ = pygame.mouse.get_pressed()
         x,y = pygame.mouse.get_pos()
+        clkstate = self.checkClick()
+
+        #check drag-off
+        if left == 1:
+            if self.checkDragOff((x,y)):
+                if self.function_dragoff != None:
+                    self.function_dragoff()
 
         #X range
         if self.parent == None:
@@ -174,8 +214,6 @@ class button():
                     
                     if self.lastClicked == 0:
                         self.color = self.color_hover 
-
-                    clkstate = self.checkClick()
 
                     if clkstate == 'up':
                         self.function()
