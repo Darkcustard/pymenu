@@ -80,7 +80,7 @@ class Element():
 
         self.addArg("color",(125,125,125))
         self.addArg("color_default",self.color)
-        
+
         self.addArg("outline",False)
         self.addArg("outline_size",1)
         self.addArg("outline_color",(0,0,0))
@@ -88,7 +88,7 @@ class Element():
         self.addArg("image",None)
         self.addArg("image_size",None)
         self.addArg("image_pos",(0,0))
-        
+
         self.addArg("text",None)
         self.addArg("text_color",(255,255,255))
         self.addArg("text_color_background",(0,0,0,0))
@@ -129,7 +129,7 @@ class Button(Element):
         
         super().compile()
 
-        #
+        #button stuff
 
             
 
