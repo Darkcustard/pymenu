@@ -596,3 +596,79 @@ class image():
 
         for child in self.children:
             child.draw()
+
+class slider():
+
+    class slider():
+
+        def __init__(self):
+            pass
+
+    def __init__(self,window,args):
+        
+        self.window = window
+        self.children = []
+
+        if "pos" in args:
+            self.pos = args["pos"]
+        
+        else:
+            self.pos = [0,0]
+
+        if "outline" in args:
+            self.outline = args["outline"]
+
+        else:
+            self.outline = False
+
+        if "outline_size" in args:
+            self.outline_size = args["outline_size"]
+
+        else:
+            self.outline_size = 1
+
+        if "outline_color" in args:
+            self.outline_color = args["outline_color"]
+
+        else:
+            self.outline_color = [0,0,0]
+
+        if "color" in args:
+            self.color = args["color"]
+
+        else:
+            self.color = [50,50,50]
+
+        if "size" in args:
+            self.size = args["size"]
+
+        else:
+            self.size = [100,20]
+
+        if "slider_color" in args:
+            self.slider_color = args["slider_color"]
+
+        else:
+            self.slider_color = [125,125,125]
+
+
+        if "slider_outline" in args:
+            self.slider_outline = args["slider_outline"]
+
+        else:
+            self.slider_outline = False
+
+        if "slider_outline_color" in args:
+            self.slider_outline_color = args["slider_outline_color"]
+        
+        else:
+            self.slider_outline_color = (0,0,0)
+
+        if "slider_outline_size" in args:
+            self.slider_outline_size = args["slider_outline_size"]
+
+        else:
+            self.slider_outline_size = 1
+
+        
+        
