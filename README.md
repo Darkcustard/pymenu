@@ -1,3 +1,4 @@
+
 # pymenu
 Pygame based library for ui simplification
 Elements can be individually handled or parented to another element to be handled automatically under the parents.draw() method
@@ -14,7 +15,10 @@ Each element has a lot of customization but default values permit you to use the
 
 # Todo
 
-* Get absolute position relative to window method
+* Get absolute position relative to window method (v1)
+* Organise Arg handlers by type (v2)
+* Implement Remaining functionality from v1 into v2
+* Add Image capability to Element's compile method
 
 
 
