@@ -3,7 +3,7 @@ import pygame
 pygame.font.init()
 
 
-class Element():
+class Panel():
 
     def addArg(self,name:str,default):
         
@@ -93,9 +93,9 @@ class Element():
 
         self.addArg("text",None)
         self.addArg("text_color",(255,255,255))
-        self.addArg("text_color_background",(0,0,0,0))
+        self.addArg("text_color_background",None)
         self.addArg("text_pos",self.pos)
-        self.addArg("text_font","Arial")
+        self.addArg("text_font",None)
         self.addArg("text_bold",False)
         self.addArg("text_italic",False)
         self.addArg("text_size",15)
@@ -116,7 +116,7 @@ class Element():
 
 
 
-class Button(Element):
+class Button(Panel):
 
     def __init__(self,window,args):
 
@@ -125,12 +125,13 @@ class Button(Element):
         self.addArg("function_down",lambda:print("down"))
         self.addArg("function_up",lambda:print("up"))
         self.addArg("function_hold",lambda:print("hold"))
-        self.addArg("function_dragoff",lambda:print("down"))
+        self.addArg("function_dragoff",lambda:print("dragoff"))
         self.addArg("color_hover",(100,100,100))
         self.addArg("color_clicked",(75,75,75))
 
 
         self.lastclickstatus = False
+        self.lasthoverstatus = False
         self.compile()
 
     def compile(self):
@@ -152,28 +153,50 @@ class Button(Element):
 
         return False
 
+    def handleEvents(self):
 
-    def handleClicks(self):
-        
-        #get edge triggers
         currentclickstatus, _, _ = pygame.mouse.get_pressed()
+        currenthoverstatus = self.checkHover()
+
+        #handle hover edge trigger
+
+        #start hovering
+        if currenthoverstatus and not self.lasthoverstatus:
+            self.color = self.color_hover
         
-        #check hovering
+        #stop hovering
+        if not currenthoverstatus and self.lasthoverstatus:
+            self.color = self.color_default
+
+            if currentclickstatus:
+                self.function_dragoff()
+
+        
+        #handle click edge trigger
+
         if self.checkHover():
+            
+            #held down
+            if currentclickstatus:
+                self.function_hold()
+
             #up
             if ( not currentclickstatus and self.lastclickstatus):
                 self.function_up()
+                self.color = self.color_hover
 
             #down
             if (currentclickstatus and not self.lastclickstatus):
                 self.function_down()
+                self.color = self.color_clicked
 
         self.lastclickstatus = currentclickstatus
+        self.lasthoverstatus = currenthoverstatus
+
 
     def draw(self):
-
-        self.handleClicks()
-
+        
+        self.handleEvents()
         super().draw() 
 
 

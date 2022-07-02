@@ -2,10 +2,13 @@ from re import L
 import pygame
 import v2
 
+
+
 WIN = pygame.display.set_mode((500,500))
 
 button = v2.Button(WIN,
-        {})
+        {
+            "text": "dogwater",})
 
 
 run = True
