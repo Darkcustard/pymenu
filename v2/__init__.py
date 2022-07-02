@@ -60,10 +60,12 @@ class Element():
     def draw(self):
         
         if self.outline:
-            pygame.draw.rect(self.outline_rect,self.outline_color)
+            pygame.draw.rect(self.window,self.outline_color,self.outline_rect)
         
-        pygame.draw.rect(self.rect,self.color)
-        pygame.blit(self.text_object,self.text_object_pos)
+        pygame.draw.rect(self.window,self.color,self.rect)
+
+        if self.text != None:
+            self.window.blit(self.text_object,self.text_object_pos)
 
         for child in self.children:
             child.draw()
@@ -127,11 +129,56 @@ class Button(Element):
         self.addArg("color_hover",(100,100,100))
         self.addArg("color_clicked",(75,75,75))
 
+
+        self.lastclickstatus = False
+        self.compile()
+
     def compile(self):
         
         super().compile()
 
         #button stuff
+    
+    def checkHover(self):
+
+        self.mousepos = pygame.mouse.get_pos()
+
+        #x 
+        if self.mousepos[0] > self.pos[0] and self.mousepos[0] < self.pos[0] + self.size[0]:
+            #y
+            if (self.mousepos[1] > self.pos[1] and self.mousepos[1] < self.pos[1] + self.size[1]):
+
+                return True
+
+        return False
+
+
+    def handleClicks(self):
+        
+        #get edge triggers
+        currentclickstatus, _, _ = pygame.mouse.get_pressed()
+        
+        #check hovering
+        if self.checkHover():
+            #up
+            if ( not currentclickstatus and self.lastclickstatus):
+                self.function_up()
+
+            #down
+            if (currentclickstatus and not self.lastclickstatus):
+                self.function_down()
+
+        self.lastclickstatus = currentclickstatus
+
+    def draw(self):
+
+        self.handleClicks()
+
+        super().draw() 
+
+
+
+
 
             
 
