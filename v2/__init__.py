@@ -124,6 +124,8 @@ class Button(Element):
         self.addArg("function_up",lambda:print("up"))
         self.addArg("function_hold",lambda:print("hold"))
         self.addArg("function_dragoff",lambda:print("down"))
+        self.addArg("color_hover",(100,100,100))
+        self.addArg("color_clicked",(75,75,75))
 
     def compile(self):
         
