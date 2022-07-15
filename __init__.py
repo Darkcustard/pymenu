@@ -42,7 +42,7 @@ class Panel():
                     self.text,
                     self.text_antialias,
                     self.text_color,
-                    self.text_color_background)
+                    self.text_color_background).convert_alpha()
         
 
     def setPos(self,pos):
@@ -106,7 +106,9 @@ class Panel():
         if self.parent != None:
             self.parent.children.append(self)
 
-        self.compile()
+        if not issubclass(self.__class__,Panel):
+            self.compile()
+
 
 
 
@@ -117,19 +119,110 @@ class Input(Panel):
 
     def __init__(self,window,args):
 
-        super().__init__(window,args)
+        super().__init__(window,args) #compiles
 
-        self.addArg("input_default","default")
+        self.addArg("input_size",(100,15))
         self.addArg("input_color",(80,80,80))
+        self.addArg("input_pos",(0,0))
+        self.addArg("input_text_relative_pos", True)
+
         self.addArg("input_outline",False)
         self.addArg("input_outline_size",1)
+        self.addArg("input_outline_color",(0,0,0))
+        
+        self.addArg("input_text","Default Text")
+        self.addArg("input_text_color",(255,255,255))
+        self.addArg("input_text_color_background",None)
+        self.addArg("input_text_pos",self.pos)
+        self.addArg("input_text_font",None)
+        self.addArg("input_text_bold",False)
+        self.addArg("input_text_italic",False)
+        self.addArg("input_text_size",15)
+        self.addArg("input_text_underline",False)
+        self.addArg("input_text_antialias",True)
+        self.addArg("input_text_relative_pos",True)
+
+        self.compile()
+
+    def checkHover(self):
+
+        self.mousepos = pygame.mouse.get_pos()
+        #x 
+        if self.mousepos[0] > self.pos[0] and self.mousepos[0] < self.pos[0] + self.size[0]:
+            #y
+            if (self.mousepos[1] > self.pos[1] and self.mousepos[1] < self.pos[1] + self.size[1]):
+
+                return True
+
+        return False
+
+
+    def handleSelection(self):
+        
+        pass
+
+    def handleTyping(self):
+        pass
+
+    def compile(self):
+
+        # input box
+        self.input_rect = pygame.Rect(self.input_pos[0],self.input_pos[1],self.input_size[0],self.input_size[1])
+
+        #outline
+        if self.input_outline:
+            self.input_outline_rect = pygame.Rect(self.input_pos[0],self.input_pos[1],self.input_size[0],self.input_size[1])
+
+
+        # text
+        if self.input_text != None:
+            
+            self.input_font = pygame.font.Font(self.input_text_font,self.input_text_size)
+            self.input_font.bold = self.input_text_bold
+            self.input_font.italic = self.input_text_bold
+            self.input_font.underline = self.input_text_underline
+            self.input_text_object_pos = self.input_text_pos
+
+            if self.input_text_relative_pos:
+                self.input_text_object_pos = (self.input_text_pos[0]+self.pos[0],self.input_text_pos[1]+self.pos[1])
+            
+            self.input_text_object = self.input_font.render(
+                    self.input_text,
+                    self.input_text_antialias,
+                    self.input_text_color,
+                    self.input_text_color_background).convert_alpha()
+
+            super().compile()
+        
+    def draw(self):
+        
+        super().draw()
+
+        if self.input_outline:
+            pygame.draw.rect(self.window,self.input_outline_color,self.input_outline_rect)
+
+        pygame.draw.rect(self.window,self.input_color,self.input_rect)
+
+        if self.input_text != None:
+            self.window.blit(self.input_text_object,self.input_text_object_pos)
+
+        
+            
+        
+
+
+
+        
+
+
+
 
 
 class Button(Panel):
 
     def __init__(self,window,args):
 
-        super().__init__(window,args)
+        super().__init__(window,args) #compiles
         
         self.addArg("function_down",lambda:print("down"))
         self.addArg("function_up",lambda:print("up"))
@@ -141,8 +234,9 @@ class Button(Panel):
 
         self.lastclickstatus = False
         self.lasthoverstatus = False
-        self.compile()
 
+        self.compile()
+        
     def compile(self):
         
         super().compile()
