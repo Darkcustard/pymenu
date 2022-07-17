@@ -109,12 +109,6 @@ class Panel():
         if not issubclass(self.__class__,Panel):
             self.compile()
 
-
-
-
-
-
-
 class Input(Panel):
 
     def __init__(self,window,args):
@@ -142,32 +136,78 @@ class Input(Panel):
         self.addArg("input_text_antialias",True)
         self.addArg("input_text_relative_pos",True)
 
+        self.active = False
+        self.previousMouseState = False
         self.compile()
 
     def checkHover(self):
+        
 
         self.mousepos = pygame.mouse.get_pos()
         #x 
-        if self.mousepos[0] > self.pos[0] and self.mousepos[0] < self.pos[0] + self.size[0]:
+        if (self.mousepos[0] > self.input_pos[0] and self.mousepos[0] < self.input_pos[0] + self.input_size[0]):
             #y
-            if (self.mousepos[1] > self.pos[1] and self.mousepos[1] < self.pos[1] + self.size[1]):
-
+            if (self.mousepos[1] > self.input_pos[1] and self.mousepos[1] < self.input_pos[1] + self.input_size[1]):
                 return True
+
 
         return False
 
 
     def handleSelection(self):
         
-        pass
+        mouseState, _, _ = pygame.mouse.get_pressed()
+        hovering = self.checkHover()
+
+        #down
+        if mouseState and not self.previousMouseState:
+            if hovering:
+                self.active = True
+            else:
+                self.active = False
+
+        self.previousMouseState = mouseState
+
+        
 
     def handleTyping(self):
-        pass
+        
+        keydownList = []
+        self.keyboardState = pygame.key.get_pressed()
+        
+        for x in range(len(self.keyboardState)):
+            
+
+
+            key = self.keyboardState[x]
+            keyPrevState = self.previousKeyboardState[x]
+            
+            if key and not keyPrevState:
+                
+                keydownList.append(True)
+
+            else:
+
+                keydownList.append(False)
+
+        for x in range(len(keydownList)):
+            if keydownList[x]:
+                print(chr(x), x)
+
+
+
+        self.previousKeyboardState = self.keyboardState
 
     def compile(self):
 
         # input box
+        if self.input_text_relative_pos:
+            self.input_pos = (self.input_pos[0] + self.pos[0], self.input_pos[1] + self.pos[1])
+
         self.input_rect = pygame.Rect(self.input_pos[0],self.input_pos[1],self.input_size[0],self.input_size[1])
+        self.previousKeyboardState = pygame.key.get_pressed()
+
+
 
         #outline
         if self.input_outline:
@@ -196,6 +236,8 @@ class Input(Panel):
         
     def draw(self):
         
+        self.handleTyping()
+        self.handleSelection()
         super().draw()
 
         if self.input_outline:
@@ -205,18 +247,6 @@ class Input(Panel):
 
         if self.input_text != None:
             self.window.blit(self.input_text_object,self.input_text_object_pos)
-
-        
-            
-        
-
-
-
-        
-
-
-
-
 
 class Button(Panel):
 
