@@ -92,7 +92,7 @@ class Panel():
         self.addArg("image_pos",(0,0))
 
         self.addArg("text",None)
-        self.addArg("text_color",(255,255,255))
+        self.addArg("text_color",(10,10,10))
         self.addArg("text_color_background",None)
         self.addArg("text_pos",self.pos)
         self.addArg("text_font",None)
@@ -106,8 +106,9 @@ class Panel():
         if self.parent != None:
             self.parent.children.append(self)
 
-        if not issubclass(self.__class__,Panel):
+        if self.__class__ == Panel:
             self.compile()
+            
 
 class Input(Panel):
 
