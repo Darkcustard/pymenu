@@ -120,7 +120,7 @@ class Input(Panel):
         self.addArg("input_size",(100,15))
         self.addArg("input_color",(80,80,80))
         self.addArg("input_pos",(0,0))
-        self.addArg("input_text_relative_pos", True)
+        self.addArg("input_relative_pos", True)
 
         self.addArg("input_outline",False)
         self.addArg("input_outline_size",1)
@@ -209,10 +209,16 @@ class Input(Panel):
         self.previousKeyboardState = self.keyboardState
 
     def compile(self):
-
+        
         # input box
-        if self.input_text_relative_pos:
+
+        if self.input_relative_pos:
             self.input_pos = (self.input_pos[0] + self.pos[0], self.input_pos[1] + self.pos[1])
+
+
+        # input box text
+        if self.input_text_relative_pos:
+            self.input_text_pos = (self.input_text_pos[0] + self.input_pos[0], self.input_text_pos[1] + self.input_pos[1])
 
         self.input_rect = pygame.Rect(self.input_pos[0],self.input_pos[1],self.input_size[0],self.input_size[1])
         self.previousKeyboardState = pygame.key.get_pressed()
