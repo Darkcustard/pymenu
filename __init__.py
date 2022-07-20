@@ -255,10 +255,10 @@ class Button(Panel):
 
         super().__init__(window,args) #compiles
         
-        self.addArg("function_down",lambda:print("down"))
+        self.addArg("function_down",None)
         self.addArg("function_up",lambda:print("up"))
-        self.addArg("function_hold",lambda:print("hold"))
-        self.addArg("function_dragoff",lambda:print("dragoff"))
+        self.addArg("function_hold",None)
+        self.addArg("function_dragoff",None)
         self.addArg("color_hover",(100,100,100))
         self.addArg("color_clicked",(75,75,75))
 
@@ -303,7 +303,8 @@ class Button(Panel):
             self.color = self.color_default
 
             if currentclickstatus:
-                self.function_dragoff()
+                if self.function_dragoff != None:
+                    self.function_dragoff()
 
         
         #handle click edge trigger
@@ -312,16 +313,21 @@ class Button(Panel):
             
             #held down
             if currentclickstatus:
-                self.function_hold()
+                if self.function_hold != None:
+                    self.function_hold()
 
             #up
             if ( not currentclickstatus and self.lastclickstatus):
-                self.function_up()
+                if self.function_up != None:
+                    self.function_up()
+
                 self.color = self.color_hover
 
             #down
             if (currentclickstatus and not self.lastclickstatus):
-                self.function_down()
+                if self.function_down != None:
+                    self.function_down()
+
                 self.color = self.color_clicked
 
         self.lastclickstatus = currentclickstatus
