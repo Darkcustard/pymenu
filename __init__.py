@@ -248,8 +248,12 @@ class Input(Panel):
         
     def draw(self):
         
-        self.handleTyping()
+        
         self.handleSelection()
+
+        if self.active:
+            self.handleTyping()
+
         super().draw()
 
         if self.input_outline:
