@@ -138,6 +138,16 @@ class Input(Panel):
         self.addArg("input_text_antialias",True)
         self.addArg("input_text_relative_pos",True)
 
+        # input box
+
+        if self.input_relative_pos:
+            self.input_pos = (self.input_pos[0] + self.pos[0], self.input_pos[1] + self.pos[1])
+
+
+        # input box text
+        if self.input_text_relative_pos:
+            self.input_text_pos = (self.input_text_pos[0] + self.input_pos[0], self.input_text_pos[1] + self.input_pos[1])
+
         self.active = False
         self.previousMouseState = False
         self.compile()
@@ -209,16 +219,6 @@ class Input(Panel):
         self.previousKeyboardState = self.keyboardState
 
     def compile(self):
-        
-        # input box
-
-        if self.input_relative_pos:
-            self.input_pos = (self.input_pos[0] + self.pos[0], self.input_pos[1] + self.pos[1])
-
-
-        # input box text
-        if self.input_text_relative_pos:
-            self.input_text_pos = (self.input_text_pos[0] + self.input_pos[0], self.input_text_pos[1] + self.input_pos[1])
 
         self.input_rect = pygame.Rect(self.input_pos[0],self.input_pos[1],self.input_size[0],self.input_size[1])
         self.previousKeyboardState = pygame.key.get_pressed()
