@@ -1,4 +1,5 @@
 
+
 import pygame
 pygame.font.init()
 
@@ -128,7 +129,7 @@ class Input(Panel):
         self.addArg("input_text","Default Text")
         self.addArg("input_text_color",(255,255,255))
         self.addArg("input_text_color_background",None)
-        self.addArg("input_text_pos",self.pos)
+        self.addArg("input_text_pos",self.input_pos)
         self.addArg("input_text_font",None)
         self.addArg("input_text_bold",False)
         self.addArg("input_text_italic",False)
@@ -193,7 +194,15 @@ class Input(Panel):
 
         for x in range(len(keydownList)):
             if keydownList[x]:
-                print(chr(x), x)
+                
+                if x == 8:
+                    self.input_text = self.input_text[:-1]
+
+                else:
+                    self.input_text += chr(x)
+
+
+        self.compile()
 
 
 
@@ -338,16 +347,6 @@ class Button(Panel):
         
         self.handleEvents()
         super().draw() 
-
-
-
-
-
-            
-
-
-
-
 
 
 
