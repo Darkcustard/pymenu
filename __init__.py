@@ -144,10 +144,6 @@ class Input(Panel):
             self.input_pos = (self.input_pos[0] + self.pos[0], self.input_pos[1] + self.pos[1])
 
 
-        # input box text
-        if self.input_text_relative_pos:
-            self.input_text_pos = (self.input_text_pos[0] + self.input_pos[0], self.input_text_pos[1] + self.input_pos[1])
-
         self.active = False
         self.previousMouseState = False
         self.compile()
