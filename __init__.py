@@ -1,6 +1,7 @@
 
 
 import pygame
+import string
 pygame.font.init()
 
 
@@ -122,6 +123,10 @@ class Input(Panel):
     def __init__(self,window,args):
 
         super().__init__(window,args) #compiles
+        self.alphabet = list(string.printable)
+        self.backspaceTick = 0
+        self.backspaceDelay = 0
+        self.backspacing = False
 
         self.addArg("input_size",(100,15))
         self.addArg("input_color",(80,80,80))
@@ -167,6 +172,26 @@ class Input(Panel):
 
         return False
 
+    def handleBackspace(self):
+        
+        if self.keyboardState[8]:
+            self.backspaceDelay += 1
+        else:
+            self.backspaceDelay = 0
+
+        
+        if self.backspaceDelay > 90:
+            self.backspacing = True
+        else:
+            self.backspacing = False
+        
+        if self.backspacing:
+            self.backspaceTick += 1
+
+        if self.backspaceTick > 30:
+            self.input_text = self.input_text[:-1]
+            self.backspaceTick = 0
+
 
     def handleSelection(self):
         
@@ -209,10 +234,10 @@ class Input(Panel):
                 
                 if x == 8:
                     self.input_text = self.input_text[:-1]
-
                 else:
-                    self.input_text += chr(x)
-
+                    char = chr(x)
+                    if char in self.alphabet:
+                        self.input_text += char
 
         self.compile()
 
@@ -259,6 +284,7 @@ class Input(Panel):
 
         if self.active:
             self.handleTyping()
+            self.handleBackspace()
 
         super().draw()
 
