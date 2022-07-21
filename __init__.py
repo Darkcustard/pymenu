@@ -61,6 +61,9 @@ class Panel():
     
     def draw(self):
         
+        if self.function_tick != None:
+            self.function_tick()
+
         if self.outline:
             pygame.draw.rect(self.window,self.outline_color,self.outline_rect)
         
@@ -104,6 +107,8 @@ class Panel():
         self.addArg("text_underline",False)
         self.addArg("text_antialias",True)
         self.addArg("text_relative_pos",True)
+
+        self.addArg("function_tick",None)
 
         if self.parent != None:
             self.parent.children.append(self)
