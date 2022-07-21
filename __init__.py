@@ -16,7 +16,7 @@ class Panel():
     # build associated rects and objects based off of attribs.
     def compile(self):
         
-        # basepanel
+        # base panel
         self.rect = pygame.Rect(self.pos,self.size)
         
         # outline
@@ -29,6 +29,7 @@ class Panel():
         
         # text
         if self.text != None:
+            
             
             self.font = pygame.font.Font(self.text_font,self.text_size)
             self.font.bold = self.text_bold
