@@ -128,6 +128,7 @@ class Input(Panel):
         self.backspaceDelay = 0
         self.backspacing = False
 
+        self.addArg("fps",60)
         self.addArg("input_size",(100,15))
         self.addArg("input_color",(80,80,80))
         self.addArg("input_pos",(0,0))
@@ -180,7 +181,7 @@ class Input(Panel):
             self.backspaceDelay = 0
 
         
-        if self.backspaceDelay > 90:
+        if self.backspaceDelay > self.fps/4:
             self.backspacing = True
         else:
             self.backspacing = False
@@ -188,7 +189,7 @@ class Input(Panel):
         if self.backspacing:
             self.backspaceTick += 1
 
-        if self.backspaceTick > 30:
+        if self.backspaceTick > self.fps/16:
             self.input_text = self.input_text[:-1]
             self.backspaceTick = 0
 
