@@ -32,7 +32,7 @@ class Panel():
             
             self.font = pygame.font.Font(self.text_font,self.text_size)
             self.font.bold = self.text_bold
-            self.font.italic = self.text_bold
+            self.font.italic = self.text_italic
             self.font.underline = self.text_underline
             self.text_object_pos = self.text_pos
 
