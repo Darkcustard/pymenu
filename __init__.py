@@ -16,6 +16,16 @@ class Panel():
     # build associated rects and objects based off of attribs.
     def compile(self):
         
+        #image
+        if self.image != None:
+            self.image_object = pygame.image.load(self.image).convert_alpha()
+
+            if self.image_size != None:
+                self.image_object = pygame.transform.scale(self.image_object,self.image_size)
+
+
+
+        
         # basepanel
         self.rect = pygame.Rect(self.pos,self.size)
         
@@ -64,6 +74,8 @@ class Panel():
             pygame.draw.rect(self.window,self.outline_color,self.outline_rect)
         
         pygame.draw.rect(self.window,self.color,self.rect)
+        if self.image != None:
+            self.window.blit(self.image_object,self.image_pos)
 
         if self.text != None:
             self.window.blit(self.text_object,self.text_object_pos)
