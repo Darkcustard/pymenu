@@ -1,6 +1,7 @@
 
 
 import pygame
+import string
 pygame.font.init()
 
 
@@ -40,9 +41,10 @@ class Panel():
         # text
         if self.text != None:
             
+            
             self.font = pygame.font.Font(self.text_font,self.text_size)
             self.font.bold = self.text_bold
-            self.font.italic = self.text_bold
+            self.font.italic = self.text_italic
             self.font.underline = self.text_underline
             self.text_object_pos = self.text_pos
 
@@ -70,6 +72,9 @@ class Panel():
     
     def draw(self):
         
+        if self.function_tick != None:
+            self.function_tick()
+
         if self.outline:
             pygame.draw.rect(self.window,self.outline_color,self.outline_rect)
         
@@ -116,6 +121,8 @@ class Panel():
         self.addArg("text_antialias",True)
         self.addArg("text_relative_pos",True)
 
+        self.addArg("function_tick",None)
+
         if self.parent != None:
             self.parent.children.append(self)
 
@@ -128,7 +135,12 @@ class Input(Panel):
     def __init__(self,window,args):
 
         super().__init__(window,args) #compiles
+        self.alphabet = list(string.printable)
+        self.backspaceTick = 0
+        self.backspaceDelay = 0
+        self.backspacing = False
 
+        self.addArg("fps",60)
         self.addArg("input_size",(100,15))
         self.addArg("input_color",(80,80,80))
         self.addArg("input_pos",(0,0))
@@ -173,6 +185,26 @@ class Input(Panel):
 
         return False
 
+    def handleBackspace(self):
+        
+        if self.keyboardState[8]:
+            self.backspaceDelay += 1
+        else:
+            self.backspaceDelay = 0
+
+        
+        if self.backspaceDelay > self.fps/4:
+            self.backspacing = True
+        else:
+            self.backspacing = False
+        
+        if self.backspacing:
+            self.backspaceTick += 1
+
+        if self.backspaceTick > self.fps/16:
+            self.input_text = self.input_text[:-1]
+            self.backspaceTick = 0
+
 
     def handleSelection(self):
         
@@ -215,10 +247,10 @@ class Input(Panel):
                 
                 if x == 8:
                     self.input_text = self.input_text[:-1]
-
                 else:
-                    self.input_text += chr(x)
-
+                    char = chr(x)
+                    if char in self.alphabet:
+                        self.input_text += char
 
         self.compile()
 
@@ -265,6 +297,7 @@ class Input(Panel):
 
         if self.active:
             self.handleTyping()
+            self.handleBackspace()
 
         super().draw()
 
