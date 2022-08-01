@@ -433,12 +433,13 @@ class CheckBox(Panel):
         
         self.lastmousestate = mousestate
 
-
-
-
     def compile(self):
 
         super().compile()
+
+        if self.check_relative_pos:
+            if self.parent != None:
+                self.check_pos = (self.check_pos[0]+self.pos[0],self.check_pos[1]+self.pos[1])
 
         if self.check_image_true != None:
             self.checked_img = pygame.image.load(self.check_image_true)
