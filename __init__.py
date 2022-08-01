@@ -160,10 +160,12 @@ class Input(Panel):
         self.addArg("input_color",(80,80,80))
         self.addArg("input_pos",(0,0))
         self.addArg("input_relative_pos", True)
+        self.addArg("input_round_radius",10)
 
         self.addArg("input_outline",False)
         self.addArg("input_outline_size",1)
         self.addArg("input_outline_color",(0,0,0))
+        self.addArg("input_outline_round_radius",10)
         
         self.addArg("input_text","Default Text")
         self.addArg("input_text_color",(255,255,255))
@@ -317,9 +319,9 @@ class Input(Panel):
         super().draw()
 
         if self.input_outline:
-            pygame.draw.rect(self.window,self.input_outline_color,self.input_outline_rect)
+            pygame.draw.rect(self.window,self.input_outline_color,self.input_outline_rect,border_radius=self.input_outline_round_radius)
 
-        pygame.draw.rect(self.window,self.input_color,self.input_rect)
+        pygame.draw.rect(self.window,self.input_color,self.input_rect,border_radius=self.input_round_radius)
 
         if self.input_text != None:
             self.window.blit(self.input_text_object,self.input_text_object_pos)
@@ -480,20 +482,24 @@ class Slider(Panel):
         self.addArg("slider_groove_axis","x")
         self.addArg("slider_groove_pos",(0,0))
         self.addArg("slider_groove_color",(80,80,80))
+        self.addArg("slider_groove_round_radius",10)
 
         self.addArg("slider_groove_outline",True)
         self.addArg("slider_groove_outline_color",(0,0,0))
         self.addArg("slider_groove_outline_size",2)
+        self.addArg("slider_groove_outline_round_radius",10)
 
         self.addArg("slider_relative_pos", True)
         self.addArg("slider_min",0)
         self.addArg("slider_max",100)
-        self.addArg("slider_size",(40,40))
+        self.addArg("slider_size",(20,20))
         self.addArg("slider_color",(100,100,105))
+        self.addArg("slider_round_radius",10)
 
         self.addArg("slider_outline",True)
         self.addArg("slider_outline_color",(0,0,0))
-        self.addArg("slider_outline_size",2)     
+        self.addArg("slider_outline_size",1)
+        self.addArg("slider_outline_round_radius",10)     
 
         self.compile()
 
@@ -516,7 +522,10 @@ class Slider(Panel):
             sliderx = self.slider_groove_pos[0] - (self.slider_size[0]/2 - self.slider_groove_width/2)
             self.slider = pygame.Rect(sliderx,self.slider_groove.top,self.slider_size[0], self.slider_size[1])
 
-
+        if self.slider_outline:
+            SOS = self.slider_outline_size
+            self.slider_outline_rect = pygame.Rect(self.slider.left-SOS,self.slider.top-SOS,self.slider.width+SOS*2,self.slider.height+SOS*2)
+            
 
         if self.slider_groove_outline:
             SGOS = self.slider_groove_outline_size
@@ -528,10 +537,14 @@ class Slider(Panel):
 
         #outline
         if self.slider_groove_outline:
-            pygame.draw.rect(self.window,self.slider_groove_outline_color,self.slider_groove_outline_rect)
+            pygame.draw.rect(self.window,self.slider_groove_outline_color,self.slider_groove_outline_rect,border_radius=self.slider_groove_round_radius)
+        
+        if self.slider_outline:
+            pygame.draw.rect(self.window,self.slider_outline_color,self.slider_outline_rect,border_radius=self.slider_groove_outline_round_radius)
 
-        pygame.draw.rect(self.window,self.slider_groove_color,self.slider_groove)
-        pygame.draw.rect(self.window,self.slider_color,self.slider)
+
+        pygame.draw.rect(self.window,self.slider_groove_color,self.slider_groove,border_radius=self.slider_groove_round_radius)
+        pygame.draw.rect(self.window,self.slider_color,self.slider,border_radius=self.slider_round_radius)
 
 
 
