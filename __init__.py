@@ -451,6 +451,8 @@ class CheckBox(Panel):
 
 
     def draw(self):
+        
+        super().draw()
 
         if self.checked:
             if self.check_image_true != None:
@@ -462,7 +464,7 @@ class CheckBox(Panel):
         
         self.handleClick()
 
-        super().draw()
+        
 
 
 
