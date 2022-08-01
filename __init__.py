@@ -477,6 +477,9 @@ class Slider(Panel):
 
         super().__init__(window,args)
         
+        self.max = 100
+        self.value = 0
+
         self.addArg("slider_groove_length",100)
         self.addArg("slider_groove_width",10)
         self.addArg("slider_groove_axis","x")
@@ -490,8 +493,6 @@ class Slider(Panel):
         self.addArg("slider_groove_outline_round_radius",10)
 
         self.addArg("slider_relative_pos", True)
-        self.addArg("slider_min",0)
-        self.addArg("slider_max",100)
         self.addArg("slider_size",(20,20))
         self.addArg("slider_color",(100,100,105))
         self.addArg("slider_round_radius",10)
@@ -530,23 +531,73 @@ class Slider(Panel):
 
         if self.slider_groove_axis == "x":
             if self.dragging:
-                if x > self.slider_groove.left and x < self.slider_groove.right:
-                    self.slider.left = x - self.slider.width/2
 
+                if x-self.slider.width/2 >= self.slider_groove.left:
+                    if x+self.slider.width/2 <= self.slider_groove.right:
+
+                        self.slider.left = x - self.slider.width/2
+
+                        if self.slider_outline:
+                            self.slider_outline_rect.center = self.slider.center
+                    else:
+                        self.slider.right = self.slider_groove.right
+                        if self.slider_outline:
+                            self.slider_outline_rect.center = self.slider.center
+
+                else:
+                    self.slider.left = self.slider_groove.left
                     if self.slider_outline:
-                        self.slider_outline_rect.left = x - self.slider_outline_rect.width/2
+                        self.slider_outline_rect.center = self.slider.center
+                    
 
         if self.slider_groove_axis == "y":
-            pass
+            if self.dragging:
+
+                if y-self.slider.height/2 >= self.slider_groove.top:
+                    if y+self.slider.height/2 <= self.slider_groove.bottom:
+
+                        self.slider.top = y - self.slider.height/2
+
+                        if self.slider_outline:
+                            self.slider_outline_rect.center = self.slider.center
+                    else:
+                        self.slider.bottom = self.slider_groove.bottom
+                        if self.slider_outline:
+                            self.slider_outline_rect.center = self.slider.center
+
+                else:
+                    self.slider.top = self.slider_groove.top
+                    if self.slider_outline:
+                        self.slider_outline_rect.center = self.slider.center
+                    
             
+    def getValue(self):
+        
+        if self.slider_groove_axis == "x":
+            minimum = self.slider_groove.left
+            maximum = self.slider_groove.right
+            percentage = (self.slider.left - minimum)/(maximum-minimum-self.slider.width)
+            self.value = percentage*self.max
+
+        if self.slider_groove_axis == "y":
+            minimum = self.slider_groove.top
+            maximum = self.slider_groove.bottom
+            percentage = (self.slider.top - minimum)/(maximum-minimum-self.slider.height)
+            self.value = percentage*self.max
+        
+
 
     def compile(self):
         
         super().compile()
 
+
         if self.slider_relative_pos:
             self.slider_groove_pos = (self.slider_groove_pos[0] + self.pos[0] , self.slider_groove_pos[1] + self.pos[1])
 
+
+
+        #create rects and init slider knob
         if self.slider_groove_axis == "x":
             self.slider_groove = pygame.Rect(self.slider_groove_pos[0],self.slider_groove_pos[1],self.slider_groove_length,self.slider_groove_width)
             
@@ -559,6 +610,9 @@ class Slider(Panel):
             sliderx = self.slider_groove_pos[0] - (self.slider_size[0]/2 - self.slider_groove_width/2)
             self.slider = pygame.Rect(sliderx,self.slider_groove.top,self.slider_size[0], self.slider_size[1])
 
+
+
+        #outline init
         if self.slider_outline:
             SOS = self.slider_outline_size
             self.slider_outline_rect = pygame.Rect(self.slider.left-SOS,self.slider.top-SOS,self.slider.width+SOS*2,self.slider.height+SOS*2)
@@ -571,7 +625,10 @@ class Slider(Panel):
     def draw(self):
         
         self.handleDragging()
+        self.getValue()
         super().draw()
+        
+        print(self.value)
 
         #outline
         if self.slider_groove_outline:
