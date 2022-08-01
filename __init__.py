@@ -400,8 +400,6 @@ class Button(Panel):
 
 
 
-
-
 class CheckBox(Panel):
 
 
@@ -442,11 +440,14 @@ class CheckBox(Panel):
 
         super().compile()
 
+        self.checked_img = pygame.image.load(self.check_image_true)
+        self.notchecked_img = pygame.image.load(self.check_image_false)
+
         if self.check_image_true != None:
-            self.check_image_true = pygame.transform.scale(self.check_image_true,self.check_size)
+            self.checked_img = pygame.transform.scale(self.checked_img,self.check_size)
 
         if self.check_image_false != None:
-            self.check_image_false = pygame.transform.scale(self.check_image_false,self.check_size)
+            self.notchecked_img = pygame.transform.scale(self.notchecked_img,self.check_size)
 
 
 
@@ -454,11 +455,11 @@ class CheckBox(Panel):
 
         if self.checked:
             if self.check_image_true != None:
-                self.window.blit(self.check_image_true,self.check_pos)
+                self.window.blit(self.checked_img,self.check_pos)
             
         else:
             if self.check_image_false != None:
-                self.window.blit(self.check_image_false,self.check_pos)
+                self.window.blit(self.notchecked_img,self.check_pos)
         
         self.handleClick()
 
