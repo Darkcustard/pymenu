@@ -56,7 +56,19 @@ class Panel():
                     self.text_antialias,
                     self.text_color,
                     self.text_color_background).convert_alpha()
-        
+
+    def checkHover(self):
+
+        self.mousepos = pygame.mouse.get_pos()
+
+        #x 
+        if self.mousepos[0] > self.pos[0] and self.mousepos[0] < self.pos[0] + self.size[0]:
+            #y
+            if (self.mousepos[1] > self.pos[1] and self.mousepos[1] < self.pos[1] + self.size[1]):
+
+                return True
+
+        return False        
 
     def setPos(self,pos):
         self.pos = pos
@@ -333,19 +345,6 @@ class Button(Panel):
         super().compile()
 
         #button stuff
-    
-    def checkHover(self):
-
-        self.mousepos = pygame.mouse.get_pos()
-
-        #x 
-        if self.mousepos[0] > self.pos[0] and self.mousepos[0] < self.pos[0] + self.size[0]:
-            #y
-            if (self.mousepos[1] > self.pos[1] and self.mousepos[1] < self.pos[1] + self.size[1]):
-
-                return True
-
-        return False
 
     def handleEvents(self):
 
@@ -402,6 +401,68 @@ class Button(Panel):
 
 
 
+
+class CheckBox(Panel):
+
+
+    def __init__(self,window,args):
+
+        super().__init__(window,args)
+
+        self.addArg('check_pos',(0,0))
+        self.addArg('check_size',(100,100))
+        self.addArg('check_relative_pos',True)
+        self.addArg('check_image_true',None)
+        self.addArg('check_image_false',None)
+        self.addArg('checked',False)
+
+        self.lastmousestate = False
+
+        self.compile()
+
+
+
+    def handleClick(self):
+
+        mousestate, _, _ = pygame.mouse.get_pressed()
+
+        if mousestate and not self.lastmousestate:
+            if self.checkHover():
+                if self.checked:
+                    self.checked = False
+                else:
+                    self.checked = True
+        
+        self.lastmousestate = mousestate
+
+
+
+
+    def compile(self):
+
+        super().compile()
+
+        if self.check_image_true != None:
+            self.check_image_true = pygame.transform.scale(self.check_image_true,self.check_size)
+
+        if self.check_image_false != None:
+            self.check_image_false = pygame.transform.scale(self.check_image_false,self.check_size)
+
+
+
+    def draw(self):
+
+        if self.checked:
+            if self.check_image_true != None:
+                self.window.blit(self.check_image_true,self.check_pos)
+            
+        else:
+            if self.check_image_false != None:
+                self.window.blit(self.check_image_false,self.check_pos)
+        
+        self.handleClick()
+
+        super().draw()
 
 
 
