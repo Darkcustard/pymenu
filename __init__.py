@@ -627,8 +627,6 @@ class Slider(Panel):
         self.handleDragging()
         self.getValue()
         super().draw()
-        
-        print(self.value)
 
         #outline
         if self.slider_groove_outline:
