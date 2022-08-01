@@ -88,9 +88,10 @@ class Panel():
             self.function_tick()
 
         if self.outline:
-            pygame.draw.rect(self.window,self.outline_color,self.outline_rect)
+            pygame.draw.rect(self.window,self.outline_color,self.outline_rect,border_radius=self.outline_round_radius)
         
-        pygame.draw.rect(self.window,self.color,self.rect)
+        pygame.draw.rect(self.window,self.color,self.rect,border_radius=self.round_radius)
+
         if self.image != None:
             self.window.blit(self.image_object,self.image_pos)
 
@@ -108,7 +109,8 @@ class Panel():
 
         self.addArg("pos",(0,0))
         self.addArg("parent",None)
-        self.addArg("size",(125,125))
+        self.addArg("size",(125,30))
+        self.addArg("round_radius",10)
 
         self.addArg("color",(125,125,125))
         self.addArg("color_default",self.color)
@@ -116,6 +118,7 @@ class Panel():
         self.addArg("outline",False)
         self.addArg("outline_size",1)
         self.addArg("outline_color",(0,0,0))
+        self.addArg("outline_round_radius",10)
 
         self.addArg("image",None)
         self.addArg("image_size",None)
@@ -466,13 +469,69 @@ class CheckBox(Panel):
         self.handleClick()
 
         
+class Slider(Panel):
+
+    def __init__(self,window,args):
+
+        super().__init__(window,args)
+        
+        self.addArg("slider_groove_length",100)
+        self.addArg("slider_groove_width",10)
+        self.addArg("slider_groove_axis","x")
+        self.addArg("slider_groove_pos",(0,0))
+        self.addArg("slider_groove_color",(80,80,80))
+
+        self.addArg("slider_groove_outline",True)
+        self.addArg("slider_groove_outline_color",(0,0,0))
+        self.addArg("slider_groove_outline_size",2)
+
+        self.addArg("slider_relative_pos", True)
+        self.addArg("slider_min",0)
+        self.addArg("slider_max",100)
+        self.addArg("slider_size",(40,40))
+        self.addArg("slider_color",(100,100,105))
+
+        self.addArg("slider_outline",True)
+        self.addArg("slider_outline_color",(0,0,0))
+        self.addArg("slider_outline_size",2)     
+
+        self.compile()
+
+    def compile(self):
+        
+        super().compile()
+
+        if self.slider_relative_pos:
+            self.slider_groove_pos = (self.slider_groove_pos[0] + self.pos[0] , self.slider_groove_pos[1] + self.pos[1])
+
+        if self.slider_groove_axis == "x":
+            self.slider_groove = pygame.Rect(self.slider_groove_pos[0],self.slider_groove_pos[1],self.slider_groove_length,self.slider_groove_width)
+            
+            slidery = self.slider_groove.top - (self.slider_size[1]/2 - self.slider_groove_width/2)
+            self.slider = pygame.Rect(self.slider_groove.left,slidery,self.slider_size[0], self.slider_size[1])
+
+        if self.slider_groove_axis == "y":
+            self.slider_groove = pygame.Rect(self.slider_groove_pos[0],self.slider_groove_pos[1],self.slider_groove_width,self.slider_groove_length)
+            
+            sliderx = self.slider_groove_pos[0] - (self.slider_size[0]/2 - self.slider_groove_width/2)
+            self.slider = pygame.Rect(sliderx,self.slider_groove.top,self.slider_size[0], self.slider_size[1])
 
 
 
+        if self.slider_groove_outline:
+            SGOS = self.slider_groove_outline_size
+            self.slider_groove_outline_rect = pygame.Rect(self.slider_groove.left-SGOS,self.slider_groove.top-SGOS,self.slider_groove.width+SGOS*2,self.slider_groove.height+SGOS*2)
 
+    def draw(self):
 
+        super().draw()
 
+        #outline
+        if self.slider_groove_outline:
+            pygame.draw.rect(self.window,self.slider_groove_outline_color,self.slider_groove_outline_rect)
 
+        pygame.draw.rect(self.window,self.slider_groove_color,self.slider_groove)
+        pygame.draw.rect(self.window,self.slider_color,self.slider)
 
 
 
