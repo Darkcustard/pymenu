@@ -440,13 +440,12 @@ class CheckBox(Panel):
 
         super().compile()
 
-        self.checked_img = pygame.image.load(self.check_image_true)
-        self.notchecked_img = pygame.image.load(self.check_image_false)
-
         if self.check_image_true != None:
+            self.checked_img = pygame.image.load(self.check_image_true)
             self.checked_img = pygame.transform.scale(self.checked_img,self.check_size)
 
         if self.check_image_false != None:
+            self.notchecked_img = pygame.image.load(self.check_image_false)
             self.notchecked_img = pygame.transform.scale(self.notchecked_img,self.check_size)
 
 
