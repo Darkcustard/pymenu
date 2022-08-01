@@ -503,6 +503,43 @@ class Slider(Panel):
 
         self.compile()
 
+    def checkHover(self):
+        
+        self.mousepos = pygame.mouse.get_pos()
+        #x 
+        if (self.mousepos[0] > self.slider.left and self.mousepos[0] < self.slider.left + self.slider.width):
+            #y
+            if (self.mousepos[1] > self.slider.top and self.mousepos[1] < self.slider.top + self.slider.height):
+                return True
+
+
+        return False
+
+    def handleDragging(self):
+        
+        left, _, _ = pygame.mouse.get_pressed()
+        x,y = pygame.mouse.get_pos()
+
+
+        if left: 
+            if self.checkHover():
+                self.dragging = True
+
+        else:
+            self.dragging = False
+
+        if self.slider_groove_axis == "x":
+            if self.dragging:
+                if x > self.slider_groove.left and x < self.slider_groove.right:
+                    self.slider.left = x - self.slider.width/2
+
+                    if self.slider_outline:
+                        self.slider_outline_rect.left = x - self.slider_outline_rect.width/2
+
+        if self.slider_groove_axis == "y":
+            pass
+            
+
     def compile(self):
         
         super().compile()
@@ -532,7 +569,8 @@ class Slider(Panel):
             self.slider_groove_outline_rect = pygame.Rect(self.slider_groove.left-SGOS,self.slider_groove.top-SGOS,self.slider_groove.width+SGOS*2,self.slider_groove.height+SGOS*2)
 
     def draw(self):
-
+        
+        self.handleDragging()
         super().draw()
 
         #outline
