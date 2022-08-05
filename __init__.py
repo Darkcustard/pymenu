@@ -331,14 +331,13 @@ class Button(Panel):
     def __init__(self,window,args):
 
         super().__init__(window,args) #compiles
-        
+
         self.addArg("function_down",None)
         self.addArg("function_up",lambda:print("up"))
         self.addArg("function_hold",None)
         self.addArg("function_dragoff",None)
         self.addArg("color_hover",(100,100,100))
         self.addArg("color_clicked",(75,75,75))
-
 
         self.lastclickstatus = False
         self.lasthoverstatus = False
