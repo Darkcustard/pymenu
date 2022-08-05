@@ -344,12 +344,6 @@ class Button(Panel):
         self.lasthoverstatus = False
 
         self.compile()
-        
-    def compile(self):
-        
-        super().compile()
-
-        #button stuff
 
     def handleEvents(self):
 
