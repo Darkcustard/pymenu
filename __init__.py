@@ -358,8 +358,11 @@ class Button(Panel):
 
         currentclickstatus, _, _ = pygame.mouse.get_pressed()
         currenthoverstatus = self.checkHover()
-        currentkeybindstatus = keyboard[ord(self.key_bind)]
 
+        if self.key_bind != None:
+            currentkeybindstatus = keyboard[ord(self.key_bind)]
+        else:
+            currentkeybindstatus = False
         
 
         #handle hover edge trigger
