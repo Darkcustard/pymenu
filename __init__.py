@@ -340,15 +340,27 @@ class Button(Panel):
         self.addArg("color_hover",(100,100,100))
         self.addArg("color_clicked",(75,75,75))
 
+        self.addArg('key_bind',None)
+
+
+
+        # Event Memory
         self.lastclickstatus = False
         self.lasthoverstatus = False
+        self.lastkeybindstatus = False
+
 
         self.compile()
 
     def handleEvents(self):
 
+        keyboard = pygame.key.get_pressed()
+
         currentclickstatus, _, _ = pygame.mouse.get_pressed()
         currenthoverstatus = self.checkHover()
+        currentkeybindstatus = keyboard[ord(self.key_bind)]
+
+        
 
         #handle hover edge trigger
 
@@ -364,6 +376,38 @@ class Button(Panel):
                 if self.function_dragoff != None:
                     self.function_dragoff()
 
+
+        # handle keybind
+        if (not currentkeybindstatus and self.lastkeybindstatus):
+
+            if self.function_up != None:
+                self.function_up()
+                self.color = self.color_default
+                
+
+        if (currentkeybindstatus and not self.lastkeybindstatus):
+
+            if self.function_down != None:                    
+                self.function_down()
+                
+        if currentkeybindstatus:
+
+            if self.function_hold != None:
+                self.function_hold()
+
+
+            self.color = self.color_clicked
+            self.lastkeybindstatus = True
+
+        else:
+
+            self.lastkeybindstatus = False
+
+        
+
+            
+
+
         
         #handle click edge trigger
 
@@ -373,6 +417,8 @@ class Button(Panel):
             if currentclickstatus:
                 if self.function_hold != None:
                     self.function_hold()
+                    
+        
 
             #up
             if ( not currentclickstatus and self.lastclickstatus):

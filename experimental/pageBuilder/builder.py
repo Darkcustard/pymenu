@@ -1,7 +1,19 @@
+from inspect import walktree
 import pygame
-import pymenu
+from lib import pymenu
 
 PALETTE = pygame.display.set_mode((1920,1080))
+
+
+
+
+
+
+
+
+
+
+
 
 
 running = True
