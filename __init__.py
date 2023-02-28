@@ -128,7 +128,7 @@ class Panel():
         self.addArg("text",None)
         self.addArg("text_color",(10,10,10))
         self.addArg("text_color_background",None)
-        self.addArg("text_pos",self.pos)
+        self.addArg("text_pos",(0,0))
         self.addArg("text_font",None)
         self.addArg("text_bold",False)
         self.addArg("text_italic",False)
