@@ -1,7 +1,7 @@
 
 # pymenu
-Pygame based library for ui simplification
-Elements can be individually handled or parented to another element to be handled automatically under the parents.draw() method
+Pymenu is a simple library built using pygame for easy GUI creation.
+Elements can be individually handled or parented to another element to be handled automatically under the parent's .draw() method
 Each element has a lot of customization but default values permit you to use the library with very little code.
 
 # Installation
@@ -24,5 +24,7 @@ Each element has a lot of customization but default values permit you to use the
 
 6. Run "pygame.display.update()" to refresh the window.
 
+# Documentation
 
+* Proper Documentation is still to come but you can look at the "__init__.py" file for now and read what attributes can be assigned.
 
